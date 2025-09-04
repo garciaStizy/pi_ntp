@@ -1,15 +1,26 @@
+  # API Proyecto integrador
+### Registro de horarios 
 
+---
+
+## 📖 Descripción
+Este proyecto tiene como objetivo **gestionar y consultar registros de horarios** de manera sencilla y eficiente, tanto para entrada y salida de los trabajadores.  
+La API permite registrar, actualizar y consultar la información de horarios a través de endpoints REST.
+
+---
+
+## 🎯 Objetivos
+- Crear y administrar registros de horarios.  
+- Exponer la información mediante una **API REST**.  
+- Facilitar la consulta de hoarios para el admin.  
+- Mayor direccion y control de la empresa 
+---
 ### Lo que incluye
 - Registro de trabajadores con **nombre y cédula**.  
 - Inicio de sesión de usuarios con credenciales simples.  
 - Registro manual de horas de **entrada** y **salida**.  
 - Validación de horarios frente a la hora de entrada oficial (**07:30 AM**).  
-- Cálculo automático de minutos de tardanza.  
-- Notificación de tardanza al momento del registro.  
-- Visualización de registros en consola.  
-- Exportación de reportes en **PDF** (detalle y resumen por trabajador).  
-- Almacenamiento de datos en un archivo **JSON**.  
-
+---
 ### Lo que no incluye (por ahora)
 - Integración con bases de datos SQL.  
 - Gestión de permisos, vacaciones o ausencias justificadas.  
@@ -57,4 +68,9 @@ El sistema calcula la tardanza automáticamente comparando con la hora de entrad
 
 Todas las acciones quedan guardadas en el archivo db.json.
 
+##  Miembros
+- **Nombres:** Samuel Bernal,Cristian Sierra,Harrison Rengifo,Sebastian Garcia,Santiago Puerta
+- **Fecha Final:** Finnal de tercer momento 
+- **Materia:** Nuevas Tecnologias 
 
+---

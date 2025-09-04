@@ -15,3 +15,9 @@ La API permite registrar, actualizar y consultar la información de horarios a t
 - Una mayor eficiencia en cuanto a la puntualidad y finilasizacion de la jornada **LABORAL**
 
 ---
+## Miembros del proyecto
+- **Nombres:** Samuel Bernal,Cristian Sierra,Harrison Renfinjo,Sebastian Garcia,Santiago Puerta
+- **Fecha Final:** Final de momento 3
+- **Materia:** Nuevas Tecnologias
+
+---

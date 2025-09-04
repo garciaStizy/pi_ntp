@@ -8,4 +8,10 @@ Este proyecto tiene como objetivo **gestionar y consultar registros de horarios*
 La API permite registrar, actualizar y consultar la información de horarios a través de endpoints REST.
 
 ---
+## Objetivos
+- Crear y administrar registros de horarios.  
+- Exponer la información mediante una **API REST**.  
+- Llevar acabo el registro de entrada y salida de los trabajadores
+- Una mayor eficiencia en cuanto a la puntualidad y finilasizacion de la jornada **LABORAL**
 
+---

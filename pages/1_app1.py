@@ -1,9 +1,15 @@
 import streamlit as st
+import pandas as pd
+from proyecto import mostrar_horarios
+from aeropuertos import mostrar_aeropuertos  # <-- Importa la función
 
-def main():
-   st.title("API de registros de horarios")
-   st.write("Esta API permite gestionar los registros de entrada y salida de los empleados de una empresa.")
+
+st.header("Panel Principal")
 
 
-   if __name__ == "__main__":
-       main()
+st.subheader("Sección Horarios")
+mostrar_horarios()
+
+
+st.subheader("Sección Aeropuertos")
+mostrar_aeropuertos()  # <-- Muestra la segunda función

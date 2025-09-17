@@ -1,15 +1,18 @@
 import streamlit as st
-import pandas as pd
 from proyecto import mostrar_horarios
-from aeropuertos import mostrar_aeropuertos  # <-- Importa la función
-
+from aeropuertos import mostrar_aeropuertos
 
 st.header("Panel Principal")
 
+# Selector en la barra lateral
+opcion = st.sidebar.radio(
+    "Selecciona la vista:",
+    ("Horarios", "Aeropuertos")
+)
 
-st.subheader("Sección Horarios")
-mostrar_horarios()
-
-
-st.subheader("Sección Aeropuertos")
-mostrar_aeropuertos()  # <-- Muestra la segunda función
+if opcion == "Horarios":
+    st.subheader("Sección Horarios")
+    mostrar_horarios()
+elif opcion == "Aeropuertos":
+    st.subheader("Sección Aeropuertos")
+    mostrar_aeropuertos()

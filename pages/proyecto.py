@@ -2,6 +2,6 @@ import streamlit as st
 import pandas as pd
 
 def mostrar_horarios():
-    df = pd.read_csv("registro_horarios_excel.csv")
-    st.title("Registro de Horarios ⏰")
-    st.dataframe(df)
+    datos = pd.read_csv('registros_horarios_reales.csv')
+    st.title("Reegistro de Horarios ⏰")
+    st.dataframe(datos)

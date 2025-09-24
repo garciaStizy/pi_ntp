@@ -1,33 +1,13 @@
+
 import streamlit as st
-from google import genai
 
-# Configuración de la página
-st.set_page_config(page_title="Chat Básico con Gemini", layout="centered")
-st.title("💬 Chat con Gemini")
-st.markdown("Ingresa un tema o pregunta para obtener una respuesta generada por Gemini.")
+def mostrar_ia():
+	st.title("IA - Consulta a API de Inteligencia Artificial 🤖")
+	st.write("Esta sección permite interactuar con una API de IA. Ingresa tu consulta y obtén una respuesta.")
 
-# Interfaz de usuario
-prompt = st.text_input("Escribe tu pregunta o tema:", placeholder="Ej. Explica cómo funciona la IA en pocas palabras")
-enviar = st.button("Generar Respuesta")
-
-# Función que usa el código original
-def generar_respuesta(prompt):
-    if not prompt:
-        return "Por favor, ingresa un tema o pregunta."
-    try:
-        client = genai.Client(api_key="YOUR_API_KEY")  # Código original
-        response = client.models.generate_content(
-            model="gemini-2.0-flash", contents=prompt  # Código original con prompt dinámico
-        )
-        return response.text  # Código original
-    except Exception as e:
-        return f"Error: {str(e)}"
-
-# Lógica principal
-if enviar and prompt:
-    with st.spinner("Generando respuesta..."):
-        respuesta = generar_respuesta(prompt)
-        st.subheader("Respuesta:")
-        st.markdown(respuesta)
-else:
-    st.info("Escribe un tema o pregunta y haz clic en Generar Respuesta.")
+	consulta = st.text_area("Escribe tu consulta para la IA:")
+	if st.button("Enviar consulta"):
+		# Aquí se llamaría a la API de IA (simulado)
+		st.info("(Simulación) Respuesta de la IA para: " + consulta)
+	else:
+		st.caption("La respuesta aparecerá aquí luego de enviar la consulta.")

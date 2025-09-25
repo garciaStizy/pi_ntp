@@ -310,3 +310,18 @@ def mostrar_analisis_horarios(datos):
         hora_salida_str = datos.apply(lambda x: x['hora_salida'].strftime('%H:%M'), axis=1)
         salida_counts = hora_salida_str.value_counts().head(10)
         st.bar_chart(salida_counts)
+
+        # Empleados con más/menos horas
+    st.subheader("🏆 Ranking de Horas Trabajadas")
+    
+    horas_por_empleado = datos.groupby('nombre')['horas_trabajadas'].sum().sort_values(ascending=False)
+    
+    col1, col2 = st.columns(2)
+    
+    with col1:
+        st.write("🥇 Top 10 - Más Horas Trabajadas:")
+        st.dataframe(horas_por_empleado.head(10).to_frame(), use_container_width=True)
+    
+    with col2:
+        st.write("⏰ Top 10 - Menos Horas Trabajadas:")
+        st.dataframe(horas_por_empleado.tail(10).to_frame(), use_container_width=True)

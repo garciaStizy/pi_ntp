@@ -267,3 +267,19 @@ def mostrar_analisis_area_rol(datos):
     
     area_stats.columns = ['Total_Registros', 'Promedio_Horas', 'Total_Horas', 'Desv_Std_Horas']
     st.dataframe(area_stats, use_container_width=True)
+    # Análisis por rol
+    st.subheader("👔 Análisis por Rol")
+    rol_stats = datos.groupby('rol').agg({
+        'id_usuario': 'count',
+        'horas_trabajadas': ['mean', 'sum', 'std']
+    }).round(2)
+    
+    rol_stats.columns = ['Total_Registros', 'Promedio_Horas', 'Total_Horas', 'Desv_Std_Horas']
+    st.dataframe(rol_stats, use_container_width=True)
+    # Visualización combinada
+    st.subheader("Distribución Área → Rol")
+    area_rol_counts = datos.groupby(['area', 'rol']).size().reset_index(name='cantidad')
+    st.dataframe(area_rol_counts, use_container_width=True)
+
+def mostrar_analisis_horarios(datos):
+    st.header("🕐 Análisis Detallado de Horarios")

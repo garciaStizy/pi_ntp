@@ -238,3 +238,90 @@ def mostrar_valores_unicos(datos):
 
 def mostrar_analisis_temporal(datos):
     st.header("📊 Análisis Temporal")
+
+    # Tendencia de registros por fecha
+    st.subheader("Tendencia de Registros por Fecha")
+    registros_por_fecha = datos.groupby('fecha').size()
+    st.line_chart(registros_por_fecha)
+# Análisis por día de la semana
+    col1, col2 = st.columns(2)
+    
+    with col1:
+        st.subheader("Registros por Día de la Semana")
+        dia_counts = datos['dia_semana'].value_counts()
+        st.bar_chart(dia_counts)
+    
+    with col2:
+        st.subheader("Distribución por Mes")
+        mes_counts = datos['mes'].value_counts()
+        st.bar_chart(mes_counts)
+
+def mostrar_analisis_area_rol(datos):
+    st.header("👥 Análisis por Área y Rol")
+# Análisis por área
+    st.subheader("🏢 Análisis por Área")
+    area_stats = datos.groupby('area').agg({
+        'id_usuario': 'count',
+        'horas_trabajadas': ['mean', 'sum', 'std']
+    }).round(2)
+    
+    area_stats.columns = ['Total_Registros', 'Promedio_Horas', 'Total_Horas', 'Desv_Std_Horas']
+    st.dataframe(area_stats, use_container_width=True)
+    # Análisis por rol
+    st.subheader("👔 Análisis por Rol")
+    rol_stats = datos.groupby('rol').agg({
+        'id_usuario': 'count',
+        'horas_trabajadas': ['mean', 'sum', 'std']
+    }).round(2)
+    
+    rol_stats.columns = ['Total_Registros', 'Promedio_Horas', 'Total_Horas', 'Desv_Std_Horas']
+    st.dataframe(rol_stats, use_container_width=True)
+    # Visualización combinada
+    st.subheader("Distribución Área → Rol")
+    area_rol_counts = datos.groupby(['area', 'rol']).size().reset_index(name='cantidad')
+    st.dataframe(area_rol_counts, use_container_width=True)
+
+def mostrar_analisis_horarios(datos):
+    st.header("🕐 Análisis Detallado de Horarios")
+    # Estadísticas de horas trabajadas
+    col1, col2, col3, col4 = st.columns(4)
+    
+    with col1:
+        st.metric("⏰ Promedio Horas/Día", f"{datos['horas_trabajadas'].mean():.2f}")
+    with col2:
+        st.metric("📈 Máximo Horas/Día", f"{datos['horas_trabajadas'].max():.2f}")
+    with col3:
+        st.metric("📉 Mínimo Horas/Día", f"{datos['horas_trabajadas'].min():.2f}")
+    with col4:
+        st.metric("📊 Desviación Estándar", f"{datos['horas_trabajadas'].std():.2f}")
+    
+    st.markdown("---")
+    # Análisis de patrones de entrada y salida
+    col1, col2 = st.columns(2)
+    
+    with col1:
+        st.subheader("🌅 Patrones de Entrada")
+        hora_entrada_str = datos.apply(lambda x: x['hora_entrada'].strftime('%H:%M'), axis=1)
+        entrada_counts = hora_entrada_str.value_counts().head(10)
+        st.bar_chart(entrada_counts)
+    
+    with col2:
+        st.subheader("🌆 Patrones de Salida")
+        hora_salida_str = datos.apply(lambda x: x['hora_salida'].strftime('%H:%M'), axis=1)
+        salida_counts = hora_salida_str.value_counts().head(10)
+        st.bar_chart(salida_counts)
+
+        # Empleados con más/menos horas
+    st.subheader("🏆 Ranking de Horas Trabajadas")
+    
+    horas_por_empleado = datos.groupby('nombre')['horas_trabajadas'].sum().sort_values(ascending=False)
+    
+    col1, col2 = st.columns(2)
+    
+    with col1:
+        st.write("🥇 Top 10 - Más Horas Trabajadas:")
+        st.dataframe(horas_por_empleado.head(10).to_frame(), use_container_width=True)
+    
+    with col2:
+        st.write("⏰ Top 10 - Menos Horas Trabajadas:")
+        st.dataframe(horas_por_empleado.tail(10).to_frame(), use_container_width=True)

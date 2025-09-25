@@ -205,3 +205,19 @@ def mostrar_visualizaciones(datos):
         # Crear histograma manual ya que st.histogram_chart no existe
         horas_bins = pd.cut(datos['horas_trabajadas'], bins=10).value_counts().sort_index()
         st.bar_chart(horas_bins)
+        # Estadísticas por área
+        st.subheader("Horas Trabajadas por Área")
+        horas_por_area = datos.groupby('area')['horas_trabajadas'].agg(['mean', 'sum', 'count']).round(2)
+        st.dataframe(horas_por_area, use_container_width=True)
+
+def mostrar_valores_unicos(datos):
+    st.header("🔄 Análisis de Valores Únicos")
+    
+    for columna in datos.columns:
+        with st.expander(f"📋 Valores únicos en: *{columna}*"):
+            valores_unicos = datos[columna].unique()
+            
+            col1, col2 = st.columns([1, 2])
+            
+            with col1:
+                st.metric(f"Total de valores únicos", len(valores_unicos))

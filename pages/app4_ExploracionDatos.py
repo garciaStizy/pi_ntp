@@ -231,3 +231,10 @@ def mostrar_valores_unicos(datos):
             
             with col2:
                 if datos[columna].dtype in ['object']:
+                    # Frecuencia de valores
+                    freq_data = datos[columna].value_counts().head(10)
+                    st.write(f"*Frecuencia de valores en {columna}:*")
+                    st.bar_chart(freq_data)
+
+def mostrar_analisis_temporal(datos):
+    st.header("📊 Análisis Temporal")

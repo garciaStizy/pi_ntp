@@ -221,3 +221,13 @@ def mostrar_valores_unicos(datos):
             
             with col1:
                 st.metric(f"Total de valores únicos", len(valores_unicos))
+                # Mostrar algunos valores únicos
+                st.write("*Primeros 10 valores:*")
+                for i, valor in enumerate(valores_unicos[:10]):
+                    st.write(f"{i+1}. {valor}")
+                
+                if len(valores_unicos) > 10:
+                    st.write(f"... y {len(valores_unicos) - 10} más")
+            
+            with col2:
+                if datos[columna].dtype in ['object']:

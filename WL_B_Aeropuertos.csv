@@ -1,0 +1,15 @@
+﻿X,Y,OBJECTID,FID_Aeropuerto_P_250K_Clip,NOMBRE_GEO,Tipo,FID_Santander_Administrativo,BARRIO,COMUNA,VEREDA,COD_DANE_DEPMUN,MUNICIPIO,PROVINCIA,CATEGORIA
+-8194062.47825317,663173.02880084,1,28,Aeródromo La Esperanza,Aeropuerto Secundario,49,,,,68077,BARBOSA,VÉLEZ,Municipio
+-8233961.19251101,709689.329469845,2,29,Aeropuerto de Cimitarra,Aeropuerto Secundario,60,,,,68190,CIMITARRA,YARIGUÍES,Municipio
+-8154851.95384829,712227.587344568,3,30,Aeropuerto Los Comuneros,Aeropuerto Secundario,26,,,,68524,PALMAS_DEL_SOCORRO,COMUNERA,Municipio
+-8140698.22564527,735404.689828939,4,36,Aeropuerto Los Pozos,Aeropuerto Secundario,33,,,,68679,SAN_GIL,GUANENTÁ,Municipio
+-8096192.20097166,748293.596937844,5,31,Aeropuerto Regional de Málaga,Aeropuerto Secundario,62,,,,68432,MÁLAGA,GARCÍA_ROVIRA,Municipio
+-8158127.85554478,754812.353249441,6,34,Aeropuerto Gómez Ortíz de Zapatoca,Aeropuerto Secundario,37,,,,68895,ZAPATOCA_Alto_,METROPOLITANA,Municipio
+-8174017.28393942,768922.089882508,7,35,Aeropuerto de San Vicente de Chucurí,Aeropuerto Secundario,53,,,,68689,SAN_VICENTE_DE_CHUCURÍ,YARIGUÍES,Municipio
+-8216283.21273846,783990.481708819,8,33,Aeropuerto Yariguíes,Aeropuerto Principal,101,,,CAMPO_45,68081,BARRANCABERMEJA,YARIGUÍES,Vereda
+-8147256.48993426,794860.560650523,9,32,Aeropuerto Internacional de Palonegro,Aeropuerto Principal,969,,,ALTOS_DE_PALO_NEGRO,68406,LEBRIJA,METROPOLITANA,Vereda
+-8198720.49062508,801726.870830631,10,5,Pista de Aterrizaje Meseta San Rafael,Aeropuerto Secundario,84,,,LA_UNION,68081,BARRANCABERMEJA,YARIGUÍES,Vereda
+-8222419.76196687,809248.291019293,11,9,Pista de Aterrizaje La Ponderosa,Aeropuerto Secundario,75,,,,68575,PUERTO_WILCHES,YARIGUÍES,Municipio
+-8188911.50684781,811776.236220658,12,10,Pista de Aterrizaje Aguas Claras,Aeropuerto Secundario,73,,,,68655,SABANA_DE_TORRES,YARIGUÍES,Municipio
+-8182989.96759216,824382.349230445,13,27,Aeropuerto Las Cruces,Aeropuerto Secundario,73,,,,68655,SABANA_DE_TORRES,YARIGUÍES,Municipio
+-8218250.60124732,828760.510788652,14,12,Pista de Aterrizaje Puerto Wilches,Aeropuerto Secundario,75,,,,68575,PUERTO_WILCHES,YARIGUÍES,Municipio

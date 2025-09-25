@@ -283,3 +283,16 @@ def mostrar_analisis_area_rol(datos):
 
 def mostrar_analisis_horarios(datos):
     st.header("🕐 Análisis Detallado de Horarios")
+    # Estadísticas de horas trabajadas
+    col1, col2, col3, col4 = st.columns(4)
+    
+    with col1:
+        st.metric("⏰ Promedio Horas/Día", f"{datos['horas_trabajadas'].mean():.2f}")
+    with col2:
+        st.metric("📈 Máximo Horas/Día", f"{datos['horas_trabajadas'].max():.2f}")
+    with col3:
+        st.metric("📉 Mínimo Horas/Día", f"{datos['horas_trabajadas'].min():.2f}")
+    with col4:
+        st.metric("📊 Desviación Estándar", f"{datos['horas_trabajadas'].std():.2f}")
+    
+    st.markdown("---")

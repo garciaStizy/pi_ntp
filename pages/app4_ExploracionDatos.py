@@ -182,4 +182,11 @@ def mostrar_visualizaciones(datos):
         st.subheader("Distribución de Empleados por Área")
         area_counts = datos['area'].value_counts()
         st.bar_chart(area_counts)
-        
+        # Mostrar datos tabulares
+        st.subheader("Detalle por Área")
+        st.dataframe(area_counts.to_frame('Cantidad'), use_container_width=True)
+    
+    elif tipo_grafico == "👔 Distribución por Rol":
+        st.subheader("Distribución de Empleados por Rol")
+        rol_counts = datos['rol'].value_counts()
+        st.bar_chart(rol_counts)

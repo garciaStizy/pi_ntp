@@ -296,3 +296,17 @@ def mostrar_analisis_horarios(datos):
         st.metric("📊 Desviación Estándar", f"{datos['horas_trabajadas'].std():.2f}")
     
     st.markdown("---")
+    # Análisis de patrones de entrada y salida
+    col1, col2 = st.columns(2)
+    
+    with col1:
+        st.subheader("🌅 Patrones de Entrada")
+        hora_entrada_str = datos.apply(lambda x: x['hora_entrada'].strftime('%H:%M'), axis=1)
+        entrada_counts = hora_entrada_str.value_counts().head(10)
+        st.bar_chart(entrada_counts)
+    
+    with col2:
+        st.subheader("🌆 Patrones de Salida")
+        hora_salida_str = datos.apply(lambda x: x['hora_salida'].strftime('%H:%M'), axis=1)
+        salida_counts = hora_salida_str.value_counts().head(10)
+        st.bar_chart(salida_counts)

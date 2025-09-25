@@ -258,3 +258,12 @@ def mostrar_analisis_temporal(datos):
 
 def mostrar_analisis_area_rol(datos):
     st.header("👥 Análisis por Área y Rol")
+# Análisis por área
+    st.subheader("🏢 Análisis por Área")
+    area_stats = datos.groupby('area').agg({
+        'id_usuario': 'count',
+        'horas_trabajadas': ['mean', 'sum', 'std']
+    }).round(2)
+    
+    area_stats.columns = ['Total_Registros', 'Promedio_Horas', 'Total_Horas', 'Desv_Std_Horas']
+    st.dataframe(area_stats, use_container_width=True)

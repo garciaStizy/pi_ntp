@@ -190,3 +190,18 @@ def mostrar_visualizaciones(datos):
         st.subheader("Distribución de Empleados por Rol")
         rol_counts = datos['rol'].value_counts()
         st.bar_chart(rol_counts)
+# Análisis cruzado área-rol
+        st.subheader("Matriz Área vs Rol")
+        crosstab = pd.crosstab(datos['area'], datos['rol'])
+        st.dataframe(crosstab, use_container_width=True)
+    
+    elif tipo_grafico == "📅 Registros por Mes":
+        st.subheader("Número de Registros por Mes")
+        mes_counts = datos['mes'].value_counts()
+        st.bar_chart(mes_counts)
+    
+    elif tipo_grafico == "🕐 Horas Trabajadas":
+        st.subheader("Distribución de Horas Trabajadas")
+        # Crear histograma manual ya que st.histogram_chart no existe
+        horas_bins = pd.cut(datos['horas_trabajadas'], bins=10).value_counts().sort_index()
+        st.bar_chart(horas_bins)

@@ -140,3 +140,101 @@ def mostrar_analisis_columnas(datos):
 
 def mostrar_estadisticas_descriptivas(datos):
     st.header("📈 Estadísticas Descriptivas Completas")
+    # Estadísticas para columnas numéricas
+    st.subheader("🔢 Columnas Numéricas")
+    columnas_numericas = datos.select_dtypes(include=['int64', 'float64']).columns
+    if len(columnas_numericas) > 0:
+        st.dataframe(datos[columnas_numericas].describe(), use_container_width=True)
+    else:
+        st.info("No se encontraron columnas numéricas en el dataset.")
+        # Estadísticas para columnas categóricas
+    st.subheader("📝 Columnas Categóricas")
+    columnas_categoricas = datos.select_dtypes(include=['object']).columns
+    
+    for col in columnas_categoricas:
+        with st.expander(f"📊 Análisis de {col}"):
+            col1, col2 = st.columns(2)
+            
+            with col1:
+                st.write("*Estadísticas:*")
+                st.write(f"- Valores únicos: {datos[col].nunique()}")
+                st.write(f"- Valor más frecuente: {datos[col].mode().iloc[0] if not datos[col].mode().empty else 'N/A'}")
+                st.write(f"- Frecuencia del más común: {datos[col].value_counts().iloc[0]}")
+            
+            with col2:
+                st.write("*Top 5 valores más frecuentes:*")
+                st.dataframe(datos[col].value_counts().head().to_frame())
+
+def mostrar_visualizaciones(datos):
+    st.header("🎨 Visualizaciones Interactivas")
+    
+    tipo_grafico = st.selectbox(
+        "Selecciona el tipo de visualización:",
+        [
+            "📊 Distribución por Área",
+            "👔 Distribución por Rol",
+            "📅 Registros por Mes",
+            "🕐 Horas Trabajadas"
+        ]
+    )
+    
+    if tipo_grafico == "📊 Distribución por Área":
+        st.subheader("Distribución de Empleados por Área")
+        area_counts = datos['area'].value_counts()
+        st.bar_chart(area_counts)
+        # Mostrar datos tabulares
+        st.subheader("Detalle por Área")
+        st.dataframe(area_counts.to_frame('Cantidad'), use_container_width=True)
+    
+    elif tipo_grafico == "👔 Distribución por Rol":
+        st.subheader("Distribución de Empleados por Rol")
+        rol_counts = datos['rol'].value_counts()
+        st.bar_chart(rol_counts)
+# Análisis cruzado área-rol
+        st.subheader("Matriz Área vs Rol")
+        crosstab = pd.crosstab(datos['area'], datos['rol'])
+        st.dataframe(crosstab, use_container_width=True)
+    
+    elif tipo_grafico == "📅 Registros por Mes":
+        st.subheader("Número de Registros por Mes")
+        mes_counts = datos['mes'].value_counts()
+        st.bar_chart(mes_counts)
+    
+    elif tipo_grafico == "🕐 Horas Trabajadas":
+        st.subheader("Distribución de Horas Trabajadas")
+        # Crear histograma manual ya que st.histogram_chart no existe
+        horas_bins = pd.cut(datos['horas_trabajadas'], bins=10).value_counts().sort_index()
+        st.bar_chart(horas_bins)
+        # Estadísticas por área
+        st.subheader("Horas Trabajadas por Área")
+        horas_por_area = datos.groupby('area')['horas_trabajadas'].agg(['mean', 'sum', 'count']).round(2)
+        st.dataframe(horas_por_area, use_container_width=True)
+
+def mostrar_valores_unicos(datos):
+    st.header("🔄 Análisis de Valores Únicos")
+    
+    for columna in datos.columns:
+        with st.expander(f"📋 Valores únicos en: *{columna}*"):
+            valores_unicos = datos[columna].unique()
+            
+            col1, col2 = st.columns([1, 2])
+            
+            with col1:
+                st.metric(f"Total de valores únicos", len(valores_unicos))
+                # Mostrar algunos valores únicos
+                st.write("*Primeros 10 valores:*")
+                for i, valor in enumerate(valores_unicos[:10]):
+                    st.write(f"{i+1}. {valor}")
+                
+                if len(valores_unicos) > 10:
+                    st.write(f"... y {len(valores_unicos) - 10} más")
+            
+            with col2:
+                if datos[columna].dtype in ['object']:
+                    # Frecuencia de valores
+                    freq_data = datos[columna].value_counts().head(10)
+                    st.write(f"*Frecuencia de valores en {columna}:*")
+                    st.bar_chart(freq_data)
+
+def mostrar_analisis_temporal(datos):
+    st.header("📊 Análisis Temporal")

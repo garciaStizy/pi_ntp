@@ -238,3 +238,23 @@ def mostrar_valores_unicos(datos):
 
 def mostrar_analisis_temporal(datos):
     st.header("📊 Análisis Temporal")
+
+    # Tendencia de registros por fecha
+    st.subheader("Tendencia de Registros por Fecha")
+    registros_por_fecha = datos.groupby('fecha').size()
+    st.line_chart(registros_por_fecha)
+# Análisis por día de la semana
+    col1, col2 = st.columns(2)
+    
+    with col1:
+        st.subheader("Registros por Día de la Semana")
+        dia_counts = datos['dia_semana'].value_counts()
+        st.bar_chart(dia_counts)
+    
+    with col2:
+        st.subheader("Distribución por Mes")
+        mes_counts = datos['mes'].value_counts()
+        st.bar_chart(mes_counts)
+
+def mostrar_analisis_area_rol(datos):
+    st.header("👥 Análisis por Área y Rol")

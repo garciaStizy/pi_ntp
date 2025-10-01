@@ -4,6 +4,7 @@ import pandas as pd
 from pages.app1 import mostrar_horarios
 from pages.app2 import mostrar_RegistroEducativos
 from pages.app4_ExploracionDatos import mostrar_exploracion_datos
+from pages.app5_ExploracionDatos import mostrar_exploracion_centros_educativos
 
 st.set_page_config(
     page_title="Panel Principal - Sistema de Gestión", 
@@ -25,14 +26,15 @@ opcion = st.sidebar.selectbox(
         "🏠 Inicio",
         "⏰ Registro de Horarios",
         "🎓 Centros Educativos",
-        "📈 Exploración de Datos"
+        "📈 Exploración de Datos",
+        "🏫 Exploración Centros Educativos"
     )
 )
 
 # Información adicional en sidebar
 st.sidebar.divider()
 st.sidebar.subheader("📋 Información del Sistema")
-st.sidebar.info("🔄 **Estado**: Operativo\n📅 **Última actualización**: Hoy\n👥 **Módulos activos**: 3")
+st.sidebar.info("🔄 **Estado**: Operativo\n📅 **Última actualización**: Hoy\n👥 **Módulos activos**: 4")
 
 if opcion == "🏠 Inicio":
     # Bienvenida principal
@@ -105,6 +107,26 @@ if opcion == "🏠 Inicio":
             - Interfaz de análisis interactivo
             """)
     
+    st.divider()
+    
+    # App 4: Exploración Centros Educativos
+    with st.container():
+        st.subheader("🏫 Aplicación 4: Exploración Centros Educativos")
+        st.write("""
+        Módulo especializado en el análisis exploratorio de datos de centros educativos.
+        Permite realizar análisis geográficos, de infraestructura y distribuciones detalladas.
+        """)
+        
+        with st.expander("🔧 Características principales"):
+            st.write("""
+            - Análisis geográfico con mapas interactivos
+            - Evaluación del estado de infraestructura
+            - Distribuciones por municipio y categoría
+            - Estadísticas descriptivas especializadas
+            - Visualizaciones de correlaciones geográficas
+            - Análisis de concentración educativa
+            """)
+    
     # Instrucciones de uso
     st.divider()
     col1, col2, col3 = st.columns(3)
@@ -139,4 +161,6 @@ elif opcion == "🎓 Centros Educativos":
     mostrar_RegistroEducativos()
 elif opcion == "📈 Exploración de Datos":
     mostrar_exploracion_datos()
+elif opcion == "🏫 Exploración Centros Educativos":
+    mostrar_exploracion_centros_educativos()
 

@@ -36,9 +36,7 @@ def mostrar_horarios():
         roles = datos['rol'].unique()
         roles_sel = st.sidebar.multiselect("Filtrar por rol(es)", options=roles, default=list(roles))
 
-        # Filtro por ID de usuario
-        ids = datos['id_usuario'].unique()
-        id_sel = st.sidebar.selectbox("Filtrar por ID de usuario", options=['Todos'] + list(map(str, ids)))
+  
 
         # Filtro por rango de fechas
         fechas = pd.to_datetime(datos['fecha'])
@@ -61,6 +59,7 @@ def mostrar_horarios():
             value=(hora_min, hora_max)
         )
 
+
         # Aplicar filtros
         datos_filtrados = datos.copy()
         if nombre_sel != 'Todos':
@@ -69,8 +68,7 @@ def mostrar_horarios():
             datos_filtrados = datos_filtrados[datos_filtrados['area'].isin(areas_sel)]
         if roles_sel:
             datos_filtrados = datos_filtrados[datos_filtrados['rol'].isin(roles_sel)]
-        if id_sel != 'Todos':
-            datos_filtrados = datos_filtrados[datos_filtrados['id_usuario'] == int(id_sel)]
+        # (Eliminado filtro por ID de usuario)
         datos_filtrados = datos_filtrados[
             (pd.to_datetime(datos_filtrados['fecha']) >= pd.to_datetime(fecha_inicio)) &
             (pd.to_datetime(datos_filtrados['fecha']) <= pd.to_datetime(fecha_fin))
@@ -78,6 +76,17 @@ def mostrar_horarios():
         datos_filtrados = datos_filtrados[
             datos_filtrados['hora_entrada'].str[:2].astype(int).between(hora_entrada_rango[0], hora_entrada_rango[1])
         ]
+
+        # Filtro: mostrar solo la persona con más horas trabajadas
+        filtro_max_horas = st.sidebar.checkbox("Mostrar solo la persona con más horas trabajadas", value=False)
+        if filtro_max_horas and 'hora_entrada' in datos_filtrados.columns and 'hora_salida' in datos_filtrados.columns and 'nombre' in datos_filtrados.columns:
+            entrada = pd.to_datetime(datos_filtrados['fecha'] + ' ' + datos_filtrados['hora_entrada'])
+            salida = pd.to_datetime(datos_filtrados['fecha'] + ' ' + datos_filtrados['hora_salida'])
+            duracion = (salida - entrada).dt.total_seconds() / 3600
+            duracion_df = pd.DataFrame({'nombre': datos_filtrados['nombre'], 'Duración': duracion})
+            suma_horas = duracion_df.groupby('nombre').sum()
+            persona_max = suma_horas['Duración'].idxmax()
+            datos_filtrados = datos_filtrados[datos_filtrados['nombre'] == persona_max]
 
         st.subheader("Registros filtrados")
         st.dataframe(datos_filtrados.head(50))
@@ -117,12 +126,12 @@ def mostrar_horarios():
             st.subheader("Cantidad de registros por área")
             st.bar_chart(area_df)
 
-        # Gráfico 3: Registros por día
+        # Gráfico 3: Registros por día (gráfico de barras)
         if 'fecha' in datos_filtrados.columns:
             conteo_dias = datos_filtrados['fecha'].value_counts().sort_index()
             conteo_dias_df = conteo_dias.rename_axis('Fecha').reset_index(name='Cantidad')
             conteo_dias_df.set_index('Fecha', inplace=True)
-            st.subheader("Tendencia de registros por día")
-            st.line_chart(conteo_dias_df)
+            st.subheader("Cantidad de registros por día")
+            st.bar_chart(conteo_dias_df)
     except Exception as e:
         st.error(f"Error al cargar los datos: {e}")

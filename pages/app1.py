@@ -30,13 +30,11 @@ def mostrar_horarios():
 
         # Filtro múltiple por área
         areas = datos['area'].unique()
-        areas_sel = st.sidebar.multiselect("Filtrar por área(s)", options=areas, default=list(areas))
+        areas_sel = st.sidebar.multiselect("Filtrar por área(s)", options=areas, default=[])
 
         # Filtro múltiple por rol
         roles = datos['rol'].unique()
-        roles_sel = st.sidebar.multiselect("Filtrar por rol(es)", options=roles, default=list(roles))
-
-  
+        roles_sel = st.sidebar.multiselect("Filtrar por rol(es)", options=roles, default=[])
 
         # Filtro por rango de fechas
         fechas = pd.to_datetime(datos['fecha'])
@@ -59,7 +57,6 @@ def mostrar_horarios():
             value=(hora_min, hora_max)
         )
 
-
         # Aplicar filtros
         datos_filtrados = datos.copy()
         if nombre_sel != 'Todos':
@@ -68,7 +65,6 @@ def mostrar_horarios():
             datos_filtrados = datos_filtrados[datos_filtrados['area'].isin(areas_sel)]
         if roles_sel:
             datos_filtrados = datos_filtrados[datos_filtrados['rol'].isin(roles_sel)]
-        # (Eliminado filtro por ID de usuario)
         datos_filtrados = datos_filtrados[
             (pd.to_datetime(datos_filtrados['fecha']) >= pd.to_datetime(fecha_inicio)) &
             (pd.to_datetime(datos_filtrados['fecha']) <= pd.to_datetime(fecha_fin))
@@ -94,11 +90,9 @@ def mostrar_horarios():
         # Estadísticas generales
         st.subheader("Estadísticas generales")
         st.write(f"Total de registros: {len(datos_filtrados)}")
-        # Gráfico 1: Promedio de horas trabajadas por persona y Boxplot de distribución
+        # Gráfico 1: Promedio de horas trabajadas por persona
         if 'hora_entrada' in datos_filtrados.columns and 'hora_salida' in datos_filtrados.columns and 'nombre' in datos_filtrados.columns:
             try:
-                import matplotlib.pyplot as plt
-                import seaborn as sns
                 entrada = pd.to_datetime(datos_filtrados['fecha'] + ' ' + datos_filtrados['hora_entrada'])
                 salida = pd.to_datetime(datos_filtrados['fecha'] + ' ' + datos_filtrados['hora_salida'])
                 duracion = (salida - entrada).dt.total_seconds() / 3600
@@ -107,17 +101,8 @@ def mostrar_horarios():
                 duracion_prom = duracion_df.groupby('Nombre').mean()
                 st.subheader("Promedio de horas trabajadas por persona")
                 st.bar_chart(duracion_prom)
-
-                # Boxplot de la distribución de horas trabajadas por persona
-                st.subheader("Distribución de horas trabajadas por persona (Boxplot)")
-                fig, ax = plt.subplots(figsize=(8, 4))
-                sns.boxplot(x='Nombre', y='Duración', data=duracion_df, ax=ax)
-                ax.set_xticklabels(ax.get_xticklabels(), rotation=45, ha='right')
-                ax.set_xlabel('Nombre')
-                ax.set_ylabel('Horas trabajadas')
-                st.pyplot(fig)
             except Exception as e:
-                st.warning(f"No se pudo calcular la duración o el boxplot: {e}")
+                st.warning(f"No se pudo calcular la duración: {e}")
 
         # Gráfico 2: Registros por área
         if 'area' in datos_filtrados.columns:
@@ -133,5 +118,38 @@ def mostrar_horarios():
             conteo_dias_df.set_index('Fecha', inplace=True)
             st.subheader("Cantidad de registros por día")
             st.bar_chart(conteo_dias_df)
+
+        # Gráfico adicional 3: Promedio de horas trabajadas por área
+        if 'hora_entrada' in datos_filtrados.columns and 'hora_salida' in datos_filtrados.columns and 'area' in datos_filtrados.columns:
+            try:
+                entrada = pd.to_datetime(datos_filtrados['fecha'] + ' ' + datos_filtrados['hora_entrada'])
+                salida = pd.to_datetime(datos_filtrados['fecha'] + ' ' + datos_filtrados['hora_salida'])
+                duracion = (salida - entrada).dt.total_seconds() / 3600
+                area_df = pd.DataFrame({'Área': datos_filtrados['area'], 'Duración': duracion})
+                area_prom = area_df.groupby('Área').mean()
+                st.subheader("Promedio de horas trabajadas por área")
+                st.bar_chart(area_prom)
+            except Exception as e:
+                st.warning(f"No se pudo calcular el promedio de horas por área: {e}")
+
+        # Gráfico adicional 4: Top 5 días con más registros
+        if 'fecha' in datos_filtrados.columns:
+            top_dias = datos_filtrados['fecha'].value_counts().nlargest(5).sort_index()
+            top_dias_df = top_dias.rename_axis('Fecha').reset_index(name='Cantidad')
+            top_dias_df.set_index('Fecha', inplace=True)
+            st.subheader("Top 5 días con más registros")
+            st.bar_chart(top_dias_df)
+
+        # Gráfico adicional 1: Distribución de horas de entrada (histograma)
+        if 'hora_entrada' in datos_filtrados.columns:
+            import matplotlib.pyplot as plt
+            horas = datos_filtrados['hora_entrada'].str[:2].astype(int)
+            st.subheader("Distribución de horas de entrada (Histograma)")
+            fig, ax = plt.subplots()
+            ax.hist(horas, bins=range(horas.min(), horas.max()+2), edgecolor='black', align='left')
+            ax.set_xlabel('Hora de entrada')
+            ax.set_ylabel('Cantidad de registros')
+            ax.set_xticks(range(horas.min(), horas.max()+1))
+            st.pyplot(fig)
     except Exception as e:
         st.error(f"Error al cargar los datos: {e}")

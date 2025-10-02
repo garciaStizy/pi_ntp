@@ -1,10 +1,27 @@
 import streamlit as st
 import pandas as pd
+import requests 
 
+
+def cargar_datos_api():
+    # Realizar petición GET a la API
+    response = requests.get('https://68de838bd7b591b4b78fce39.mockapi.io/Horarios')
+
+    # Verificar que la petición fue exitosa
+    if response.status_code == 200:
+        # Convertir la respuesta JSON a DataFrame
+        data = response.json()
+        df = pd.DataFrame(data)
+
+        return df
+    else:
+        print(f"Error en la petición: {response.status_code}") 
+
+    
 def mostrar_horarios():
     st.sidebar.info("Visualiza los registros de horarios cargados en el sistema.")
     try:
-        datos = pd.read_csv('registros_horarios_reales.csv')
+        datos = cargar_datos_api()
         st.title("Registro de Horarios ⏰")
 
         # Filtro por nombre
@@ -63,24 +80,35 @@ def mostrar_horarios():
         ]
 
         st.subheader("Registros filtrados")
-        st.dataframe(datos_filtrados)
+        st.dataframe(datos_filtrados.head(50))
 
         # Estadísticas generales
         st.subheader("Estadísticas generales")
         st.write(f"Total de registros: {len(datos_filtrados)}")
-        # Gráfico 1: Promedio de horas trabajadas por persona
+        # Gráfico 1: Promedio de horas trabajadas por persona y Boxplot de distribución
         if 'hora_entrada' in datos_filtrados.columns and 'hora_salida' in datos_filtrados.columns and 'nombre' in datos_filtrados.columns:
             try:
+                import matplotlib.pyplot as plt
+                import seaborn as sns
                 entrada = pd.to_datetime(datos_filtrados['fecha'] + ' ' + datos_filtrados['hora_entrada'])
                 salida = pd.to_datetime(datos_filtrados['fecha'] + ' ' + datos_filtrados['hora_salida'])
                 duracion = (salida - entrada).dt.total_seconds() / 3600
                 st.write(f"Promedio de horas trabajadas: {duracion.mean():.2f} horas")
                 duracion_df = pd.DataFrame({'Nombre': datos_filtrados['nombre'], 'Duración': duracion})
-                duracion_df = duracion_df.groupby('Nombre').mean()
+                duracion_prom = duracion_df.groupby('Nombre').mean()
                 st.subheader("Promedio de horas trabajadas por persona")
-                st.bar_chart(duracion_df)
+                st.bar_chart(duracion_prom)
+
+                # Boxplot de la distribución de horas trabajadas por persona
+                st.subheader("Distribución de horas trabajadas por persona (Boxplot)")
+                fig, ax = plt.subplots(figsize=(8, 4))
+                sns.boxplot(x='Nombre', y='Duración', data=duracion_df, ax=ax)
+                ax.set_xticklabels(ax.get_xticklabels(), rotation=45, ha='right')
+                ax.set_xlabel('Nombre')
+                ax.set_ylabel('Horas trabajadas')
+                st.pyplot(fig)
             except Exception as e:
-                st.warning(f"No se pudo calcular la duración: {e}")
+                st.warning(f"No se pudo calcular la duración o el boxplot: {e}")
 
         # Gráfico 2: Registros por área
         if 'area' in datos_filtrados.columns:

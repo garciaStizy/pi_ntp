@@ -21,7 +21,7 @@ def mostrar_RegistroEducativos():
     ]
 
     st.subheader(f"Registros filtrados: {len(datos_filtrados)}")
-    st.dataframe(datos_filtrados)
+    st.dataframe(datos_filtrados.head(50))
 
     # Gráficos importantes
     # Gráfico 1: Distribución de registros por municipio

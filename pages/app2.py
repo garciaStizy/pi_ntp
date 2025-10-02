@@ -25,10 +25,16 @@ def mostrar_RegistroEducativos():
 
     # Gráficos importantes
     st.subheader("Distribución por municipio")
-    st.bar_chart(datos_filtrados['MUNICIPIO'].value_counts())
+    municipio_df = datos_filtrados['MUNICIPIO'].value_counts().rename_axis('Municipio').reset_index(name='Cantidad')
+    municipio_df.set_index('Municipio', inplace=True)
+    st.bar_chart(municipio_df)
 
     st.subheader("Distribución por estado de infraestructura")
-    st.bar_chart(datos_filtrados['Estado_InfraestructuraE'].value_counts())
+    estado_df = datos_filtrados['Estado_InfraestructuraE'].value_counts().rename_axis('Estado').reset_index(name='Cantidad')
+    estado_df.set_index('Estado', inplace=True)
+    st.bar_chart(estado_df)
 
     st.subheader("Distribución por categoría")
-    st.bar_chart(datos_filtrados['CATEGORIA'].value_counts())
+    categoria_df = datos_filtrados['CATEGORIA'].value_counts().rename_axis('Categoría').reset_index(name='Cantidad')
+    categoria_df.set_index('Categoría', inplace=True)
+    st.bar_chart(categoria_df)

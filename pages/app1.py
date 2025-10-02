@@ -74,24 +74,37 @@ def mostrar_horarios():
                 salida = pd.to_datetime(datos_filtrados['fecha'] + ' ' + datos_filtrados['hora_salida'])
                 duracion = (salida - entrada).dt.total_seconds() / 3600
                 st.write(f"Promedio de horas trabajadas: {duracion.mean():.2f} horas")
-                st.bar_chart(duracion)
+                # Crear un DataFrame para graficar la duración por persona (si existe la columna nombre)
+                if 'nombre' in datos_filtrados.columns:
+                    duracion_df = pd.DataFrame({'Nombre': datos_filtrados['nombre'], 'Duración': duracion})
+                    duracion_df = duracion_df.groupby('Nombre').mean()
+                    st.bar_chart(duracion_df)
+                else:
+                    duracion_df = pd.DataFrame({'Duración': duracion})
+                    st.bar_chart(duracion_df)
             except Exception as e:
                 st.warning(f"No se pudo calcular la duración: {e}")
 
         # Conteo por área
         if 'area' in datos_filtrados.columns:
             st.subheader("Registros por área")
-            st.bar_chart(datos_filtrados['area'].value_counts())
+            area_df = datos_filtrados['area'].value_counts().rename_axis('Área').reset_index(name='Cantidad')
+            area_df.set_index('Área', inplace=True)
+            st.bar_chart(area_df)
 
         # Conteo por rol
         if 'rol' in datos_filtrados.columns:
             st.subheader("Registros por rol")
-            st.bar_chart(datos_filtrados['rol'].value_counts())
+            rol_df = datos_filtrados['rol'].value_counts().rename_axis('Rol').reset_index(name='Cantidad')
+            rol_df.set_index('Rol', inplace=True)
+            st.bar_chart(rol_df)
 
         # Conteo por fecha
         if 'fecha' in datos_filtrados.columns:
             conteo_dias = datos_filtrados['fecha'].value_counts().sort_index()
+            conteo_dias_df = conteo_dias.rename_axis('Fecha').reset_index(name='Cantidad')
+            conteo_dias_df.set_index('Fecha', inplace=True)
             st.subheader("Registros por día")
-            st.line_chart(conteo_dias)
+            st.line_chart(conteo_dias_df)
     except Exception as e:
         st.error(f"Error al cargar los datos: {e}")

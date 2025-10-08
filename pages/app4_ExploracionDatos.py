@@ -90,3 +90,62 @@ def mostrar_resumen_general(datos):
     
     with col1:
         st.dataframe(datos.head(num_filas), use_container_width=True)
+
+        # Información del dataset
+    st.subheader("ℹ Información del Dataset")
+    
+    info_data = {
+        'Columna': datos.columns,
+        'Tipo de Dato': [str(dtype) for dtype in datos.dtypes],
+        'Valores No Nulos': [datos[col].count() for col in datos.columns],
+        'Valores Nulos': [datos[col].isnull().sum() for col in datos.columns],
+        'Valores Únicos': [datos[col].nunique() for col in datos.columns]
+    }
+    
+    info_df = pd.DataFrame(info_data)
+    st.dataframe(info_df, use_container_width=True)
+
+def mostrar_analisis_columnas(datos):
+    st.header("🔍 Análisis Detallado por Columnas")
+    
+    columna_seleccionada = st.selectbox(
+        "Selecciona una columna para análisis detallado:",
+        datos.columns
+    )
+    
+    st.subheader(f"📊 Análisis de la columna: {columna_seleccionada}")
+    
+    col1, col2 = st.columns(2)
+    
+    with col1:
+        st.markdown("📈 Estadísticas Básicas:")
+        if datos[columna_seleccionada].dtype in ['int64', 'float64']:
+            stats = datos[columna_seleccionada].describe()
+            st.dataframe(stats.to_frame().T)
+        else:
+            st.write(f"- Tipo de dato: {datos[columna_seleccionada].dtype}")
+            st.write(f"- Valores únicos: {datos[columna_seleccionada].nunique()}")
+            st.write(f"- Valores nulos: {datos[columna_seleccionada].isnull().sum()}")
+            st.write(f"- Valores más frecuentes:")
+            top_values = datos[columna_seleccionada].value_counts().head()
+            st.dataframe(top_values.to_frame())
+    
+    with col2:
+        st.markdown("🎯 Distribución de Valores:")
+        if datos[columna_seleccionada].dtype in ['int64', 'float64']:
+            st.subheader(f"Distribución de {columna_seleccionada}")
+            st.bar_chart(datos[columna_seleccionada].value_counts())
+        else:
+            value_counts = datos[columna_seleccionada].value_counts().head(10)
+            st.subheader(f"Top 10 valores más frecuentes en {columna_seleccionada}")
+            st.bar_chart(value_counts)
+
+def mostrar_estadisticas_descriptivas(datos):
+    st.header("📈 Estadísticas Descriptivas Completas")
+    # Estadísticas para columnas numéricas
+    st.subheader("🔢 Columnas Numéricas")
+    columnas_numericas = datos.select_dtypes(include=['int64', 'float64']).columns
+    if len(columnas_numericas) > 0:
+        st.dataframe(datos[columnas_numericas].describe(), use_container_width=True)
+    else:
+        st.info("No se encontraron columnas numéricas en el dataset.")

@@ -149,3 +149,74 @@ def mostrar_estadisticas_descriptivas(datos):
         st.dataframe(datos[columnas_numericas].describe(), use_container_width=True)
     else:
         st.info("No se encontraron columnas numéricas en el dataset.")
+        # Estadísticas para columnas categóricas
+    st.subheader("📝 Columnas Categóricas")
+    columnas_categoricas = datos.select_dtypes(include=['object']).columns
+    
+    for col in columnas_categoricas:
+        with st.expander(f"📊 Análisis de {col}"):
+            col1, col2 = st.columns(2)
+            
+            with col1:
+                st.write("Estadísticas:")
+                st.write(f"- Valores únicos: {datos[col].nunique()}")
+                st.write(f"- Valor más frecuente: {datos[col].mode().iloc[0] if not datos[col].mode().empty else 'N/A'}")
+                st.write(f"- Frecuencia del más común: {datos[col].value_counts().iloc[0]}")
+            
+            with col2:
+                st.write("Top 5 valores más frecuentes:")
+                st.dataframe(datos[col].value_counts().head().to_frame())
+
+def mostrar_visualizaciones(datos):
+    st.header("🎨 Visualizaciones Interactivas")
+    
+    tipo_grafico = st.selectbox(
+        "Selecciona el tipo de visualización:",
+        [
+            "📊 Distribución por Área",
+            "👔 Distribución por Rol",
+            "📅 Registros por Mes",
+            "🕐 Horas Trabajadas"
+        ]
+    )
+    
+    if tipo_grafico == "📊 Distribución por Área":
+        st.subheader("Distribución de Empleados por Área")
+        area_counts = datos['area'].value_counts()
+        st.bar_chart(area_counts)
+
+        # Estadísticas para columnas categóricas
+    st.subheader("📝 Columnas Categóricas")
+    columnas_categoricas = datos.select_dtypes(include=['object']).columns
+    
+    for col in columnas_categoricas:
+        with st.expander(f"📊 Análisis de {col}"):
+            col1, col2 = st.columns(2)
+            
+            with col1:
+                st.write("Estadísticas:")
+                st.write(f"- Valores únicos: {datos[col].nunique()}")
+                st.write(f"- Valor más frecuente: {datos[col].mode().iloc[0] if not datos[col].mode().empty else 'N/A'}")
+                st.write(f"- Frecuencia del más común: {datos[col].value_counts().iloc[0]}")
+            
+            with col2:
+                st.write("Top 5 valores más frecuentes:")
+                st.dataframe(datos[col].value_counts().head().to_frame())
+
+def mostrar_visualizaciones(datos):
+    st.header("🎨 Visualizaciones Interactivas")
+    
+    tipo_grafico = st.selectbox(
+        "Selecciona el tipo de visualización:",
+        [
+            "📊 Distribución por Área",
+            "👔 Distribución por Rol",
+            "📅 Registros por Mes",
+            "🕐 Horas Trabajadas"
+        ]
+    )
+    
+    if tipo_grafico == "📊 Distribución por Área":
+        st.subheader("Distribución de Empleados por Área")
+        area_counts = datos['area'].value_counts()
+        st.bar_chart(area_counts)

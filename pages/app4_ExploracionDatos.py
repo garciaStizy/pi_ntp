@@ -67,3 +67,26 @@ def mostrar_exploracion_datos():
 
 def mostrar_resumen_general(datos):
     st.header("📋 Resumen General del Dataset")
+
+    # Métricas principales
+    col1, col2, col3, col4 = st.columns(4)
+    
+    with col1:
+        st.metric("📊 Total de Registros", len(datos))
+    with col2:
+        st.metric("👥 Empleados Únicos", datos['nombre'].nunique())
+    with col3:
+        st.metric("🏢 Áreas Diferentes", datos['area'].nunique())
+    with col4:
+        st.metric("💼 Roles Únicos", datos['rol'].nunique())
+    
+    st.markdown("---")
+    # Vista previa de los datos
+    st.subheader("👀 Vista Previa de los Datos")
+    col1, col2 = st.columns([3, 1])
+    
+    with col2:
+        num_filas = st.slider("Número de filas a mostrar", 5, 50, 10)
+    
+    with col1:
+        st.dataframe(datos.head(num_filas), use_container_width=True)
